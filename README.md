@@ -1,5 +1,5 @@
-# symptom-tracker
-Symptom Tracker
+# symptoms-tracker
+Symptoms Tracker
 
 A beginner Python project that collects symptom information from users and validates the input.
 
