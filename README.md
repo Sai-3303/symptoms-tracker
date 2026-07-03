@@ -8,14 +8,21 @@ Symptom collection,
 Body-part validation,
 Severity tracking (0 to 10),
 Duration tracking,
-Input validation
+Input validation,
+Save collected data in JSON format, 
+Provides a simple Streamlit web interface,
+Allow users to download their submitted data 
 
 Technologies Used:
 Python,
 PyEnchant,
-JSON storage
+JSON storage,
+Streamlit frontend 
 
 Future Plans:
-Streamlit frontend,
-AI-assisted symptom extraction,
-Image upload support
+Improved user interface, 
+Smarter symptom collection window,
+AI-assisted symptom extraction using Gemini API,
+Better symptom categorization,
+Enhanced data storage and management, 
+Image upload support for symptom description
