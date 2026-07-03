@@ -13,9 +13,9 @@ Input validation
 Technologies Used:
 Python,
 PyEnchant,
+JSON storage
 
 Future Plans:
 Streamlit frontend,
-JSON storage,
 AI-assisted symptom extraction,
 Image upload support
