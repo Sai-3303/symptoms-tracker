@@ -1,4 +1,5 @@
 import enchant
+import json
 
 print("Please describe your symptoms below")
 print("You will be asked a few simple questions.\n")
@@ -11,8 +12,11 @@ questions = {
 }
 
 answers = {}
+
+# Initialize English dictionary from enchant library for word validation
 d = enchant.Dict("en_US")
 
+# Set of all valid body parts that user can enter
 allowed_body_parts = {
     "left", "right", "upper", "lower", "skin", "eye", "eyes", "ear", "ears", "nose", "tongue",
     "brain", "cerebrum", "cerebellum", "brainstem", "spinal cord", "heart",
@@ -43,9 +47,11 @@ def is_valid_body_part(answer):
     if not normalized:
         return False
 
+    # Check if exact match exists in allowed body parts
     if normalized in allowed_body_parts:
         return True
 
+    # Check if input starts with direction prefix (left/right/upper/lower)
     words = normalized.split()
     if len(words) >= 2 and words[0] in {"left", "right", "upper", "lower"}:
         return " ".join(words[1:]) in allowed_body_parts
@@ -57,6 +63,7 @@ def ask_until_valid(prompt, validator, error_message, transform=None):
     while True:
         value = input(prompt).strip()
         if validator(value):
+            # Apply optional transformation (e.g., convert to int)
             return transform(value) if transform else value
         print(error_message)
 
@@ -65,8 +72,10 @@ def validate_symptoms(value):
     words = value.split()
     if not words:
         return False
+    # Check if all words contain only letters
     if any(not word.isalpha() for word in words):
         return False
+    # Check if all words exist in English dictionary
     return all(d.check(word.lower()) for word in words)
 
 
@@ -101,7 +110,7 @@ def get_valid_integer(prompt, label):
         else:
             print(f"Please enter an integer for {label}.")
 
-
+#Take excess years hours to days, days to weeks, weeks to months, months to years
 def normalize_started(started):
     while started["hours"] >= 24:
         started["hours"] -= 24
@@ -145,6 +154,7 @@ answers["triggers"] = ask_until_valid(
     "Please enter, what triggers your symptoms."
 )
 
+
 print("\nWhen did it start?")
 started = {}
 started["years"] = get_valid_integer("Years: ", "years")
@@ -152,8 +162,10 @@ started["months"] = get_valid_integer("Months: ", "months")
 started["weeks"] = get_valid_integer("Weeks: ", "weeks")
 started["days"] = get_valid_integer("Days: ", "days")
 started["hours"] = get_valid_integer("Hours: ", "hours")
+
 normalize_started(started)
 answers["started"] = started
+
 
 print("\nSummary:")
 for key, value in answers.items():
@@ -163,3 +175,8 @@ for key, value in answers.items():
             print(f"  {sub_key}: {sub_value}")
     else:
         print(f"{key}: {value}")
+
+with open("symptom_data.json", "w") as file:
+    json.dump(answers, file, indent=4)
+    print("\nData saved to symptom_data.json")
+
